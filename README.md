@@ -13,7 +13,14 @@ Shortener-Play was implemented in the MVC pattern by Java PlayFramework 2.5:
   * Views do not use standard PlayFramework2.5 template manager to make project easier  
 
 ## How to run
-  Project has prepared zip file to run standalone service easy, you need only download file, unzip and run script
+  Project has prepared as zip file to run standalone service easy.
+  You need only:
+  
+  1. download and unzip file: [shortener-play25-1.0-SNAPSHOT.zip](https://github.com/vnazarov1969/shortener-play/raw/master/dist/shortener-play25-1.0-SNAPSHOT.zip) 
+  
+  2. run script
+  
+   $sh bin/shortener-play25
 
 ## How to build
   PlayFramework uses SBT as build tool. 
