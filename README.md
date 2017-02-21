@@ -37,4 +37,4 @@ Shortener-Play was implemented in the MVC pattern by Java PlayFramework 2.5:
 
 ##License
 
-Shortener-Play is under MIT license. See [LICENSE.txt](https://github.com/vnazarov1969/shortener-play/master/LICENSE.txt)
+Shortener-Play is under MIT license. See [LICENSE](https://github.com/vnazarov1969/shortener-play/master/LICENSE)
