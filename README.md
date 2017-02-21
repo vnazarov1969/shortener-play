@@ -20,22 +20,18 @@ Shortener-Play was implemented in the MVC pattern by Java PlayFramework 2.5:
   SBT is compatible with Maven repository,so it can be integrate to building complex applications.
 
   So, to build project you need:
-  
-1. install SBT on you computer:  http://www.scala-sbt.org/download.html
+  1. install SBT on you computer:  http://www.scala-sbt.org/download.html
     
-    brew install sbt 
+    $brew install sbt 
+  2. clone repository:
     
-2. clone repository:
-
-  git clone https://github.com/vnazarov1969/shortener-play.git shortener-play 
-
-3. run functionality tests: 
+    $git clone https://github.com/vnazarov1969/shortener-play.git shortener-play 
+  3. run functionality tests: 
     
-    sbt clean compile test
+    $sbt clean compile test
+  4. run application: 
     
-4. run application: 
-    
-    sbt run
+    $sbt run
 
 Now you can browse this page: http://localhost:9000/help, configure service by curl   
     
