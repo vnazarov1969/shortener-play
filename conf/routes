@@ -2,4 +2,15 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-GET     /                           controllers.Application.index()
+GET     /                           controllers.Assets.at(path="/public", file="readme.html")
+
+GET     /help                       controllers.Assets.at(path="/public", file="readme.html")
+
+POST    /account                    controllers.Application.account()
+
+POST    /register                   controllers.Application.register()
+
+GET     /statistic/:accountId				controllers.Application.statistic(accountId)
+
+GET			/:shortUrl									controllers.Application.goRedirect(shortUrl)
+
