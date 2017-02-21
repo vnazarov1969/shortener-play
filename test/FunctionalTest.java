@@ -43,7 +43,7 @@ public class FunctionalTest extends WithApplication {
             .uri("/account")
             .bodyJson(Json.parse("{\"AccountId\":\"test\"}"));
     Result result = route(request);
-    assertEquals(OK, result.status());
+    assertEquals(CREATED, result.status());
     assertEquals("application/json", result.contentType().get());
 
     JsonNode jsn = Json.parse(contentAsString(result));
@@ -59,14 +59,14 @@ public class FunctionalTest extends WithApplication {
             .uri("/account")
             .bodyJson(Json.parse("{\"AccountId\":\"test\"}"));
     Result result0 = route(request0);
-    assertEquals(OK, result0.status());
+    assertEquals(CREATED, result0.status());
 
     RequestBuilder request = new RequestBuilder()
             .method(POST)
             .uri("/account")
             .bodyJson(Json.parse("{\"AccountId\":\"test\"}"));
     Result result = route(request);
-    assertEquals(OK, result.status());
+    assertEquals(CONFLICT, result.status());
     assertEquals("application/json", result.contentType().get());
 
     JsonNode jsn = Json.parse(contentAsString(result));
@@ -107,7 +107,7 @@ public class FunctionalTest extends WithApplication {
             .bodyJson(Json.parse("{\"url\":\"http://ya.ru\"}"))
             .header(AUTHORIZATION, encodeAuthHeader("local","test"));
     Result result = route(request);
-    assertEquals(OK, result.status());
+    assertEquals(CREATED, result.status());
     assertEquals("application/json", result.contentType().get());
     JsonNode jsn = Json.parse(contentAsString(result));
     assertTrue(jsn.findPath("shortUrl").asText().contains("http://localhost/"));
@@ -121,7 +121,7 @@ public class FunctionalTest extends WithApplication {
             .bodyJson(Json.parse("{\"url\":\"http://ya.ru\",\"redirectType\":301}"))
             .header(AUTHORIZATION, encodeAuthHeader("local","test"));
     Result result = route(request);
-    assertEquals(OK, result.status());
+    assertEquals(CREATED, result.status());
     assertEquals("application/json", result.contentType().get());
     JsonNode jsn = Json.parse(contentAsString(result));
     assertTrue(jsn.findPath("shortUrl").asText().contains("http://localhost/"));
@@ -134,7 +134,7 @@ public class FunctionalTest extends WithApplication {
             .bodyJson(Json.parse("{\"url\":\"http://ya.ru\",\"redirectType\":302}"))
             .header(AUTHORIZATION, encodeAuthHeader("local","test"));
     Result result = route(request);
-    assertEquals(OK, result.status());
+    assertEquals(CREATED, result.status());
     assertEquals("application/json", result.contentType().get());
     JsonNode jsn = Json.parse(contentAsString(result));
     assertTrue(jsn.findPath("shortUrl").asText().contains("http://localhost/"));
@@ -145,13 +145,10 @@ public class FunctionalTest extends WithApplication {
     RequestBuilder request = new RequestBuilder()
             .method(POST)
             .uri("/register")
-            .bodyJson(Json.parse("{\"url\":\"http://ya.ru\"}"))
+            .bodyJson(Json.parse("{\"urli\":\"http://ya.ru\"}"))
             .header(AUTHORIZATION, encodeAuthHeader("local","test"));
     Result result = route(request);
-    assertEquals(OK, result.status());
-    assertEquals("application/json", result.contentType().get());
-    JsonNode jsn = Json.parse(contentAsString(result));
-    assertTrue(jsn.findPath("shortUrl").asText().contains("http://localhost/"));
+    assertEquals(BAD_REQUEST, result.status());
   }
 
   @Test
@@ -162,7 +159,7 @@ public class FunctionalTest extends WithApplication {
             .bodyJson(Json.parse("{\"url\":\"http://ya.ru\"}"))
             .header(AUTHORIZATION, encodeAuthHeader("local","test"));
     Result result = route(request);
-    assertEquals(OK, result.status());
+    assertEquals(CREATED, result.status());
     assertEquals("application/json", result.contentType().get());
     JsonNode jsn = Json.parse(contentAsString(result));
     assertTrue(jsn.findPath("shortUrl").asText().contains("http://localhost/"));

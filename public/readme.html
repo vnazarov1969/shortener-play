@@ -2,9 +2,75 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title></title>
+    <title># Shortener-Play - example of typical REST service</title>
 </head>
 <body>
-ХаХаХа XXXxxxxxxxxxxxxxxxxxxxxxxxxx
+
+    <h1>Shortener-Play - example of typical REST service </h1>
+    <p>Shortener-Play implements usual functionality which make possible use short url instead of long ones.</p>
+
+    <p>Service gives possibility to:</p>
+    <ul>
+        <li>Registration Web address (API)</li>
+        <li>Redirect client in accordance with the shortened URL</li>
+        <li>Usage Statistics (API)</li>
+    </ul>
+    <p>Shortener-Play was implemented in the MVC pattern by Java PlayFramework 2.5:</p>
+    <ul>
+        <li>Service does not have persistence storage</li>
+        <li>Temporary storage bases on java.collections, we do not use DataBase to demonstrate capabilities of collections</li>
+        <li>Views do not use standard PlayFramework2.5 template manager to make project easier</li>
+    </ul>
+    </p>
+    <h2>How to run</h2>
+<p>Project has prepared zip file to run standalone service easy, you need only download file, unzip and run script</p>
+
+    <h2>How to build</h2>
+<p>
+PlayFramework uses SBT as build tool.
+SBT is compatible with Maven repository,so it can be integrate to building complex applications.
+</p>
+<p>
+So, to build project you need:
+    <ol>
+        <li>
+            install SBT on you computer:  http://www.scala-sbt.org/download.html
+            <pre> $brew install sbt </pre>
+        </li>
+        <li>
+            clone repository:
+            <pre>$git clone https://github.com/vnazarov1969/shortener-play.git shortener-play</pre>
+        </li>
+
+        <li>
+            run functionality tests:
+            <pre>$sbt clean compile test</pre>
+        </li>
+        <li>
+            run application:
+            <pre>$sbt run</pre>
+        </li>
+    </ol>
+</p>
+
+<p>    Now you can browse this page: http://localhost:9000/help, configure service by curl</p>
+    <pre>
+    curl -H "Content-Type: application/json" -POST localhost:9000/account -d'{"AccountId": "test"}'
+    curl -u test:test -H "Content-Type: application/json" -POST localhost:9000/register -d'{"url": "https://www.google.ru", "redirectType": "301"}'
+    curl -H "Content-Type: application/json" -GET 'localhost:9000/statistic/local'?pretty
+    </pre>
+
+<p>or using redirect service http://localhost:9000/"shortUrl"</p>
+
+<h2>API</h2>
+
+
+
+
+<h2>License</h2>
+
+<p>Shortener-Play is under MIT license. See [LICENSE](https://github.com/vnazarov1969/shortener-play/blob/master/LICENSE)</p>
+
 </body>
 </html>
+

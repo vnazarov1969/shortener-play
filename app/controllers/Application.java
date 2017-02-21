@@ -51,7 +51,10 @@ public class Application extends Controller {
       return badRequest("Invalid Json Format, 'AccointId' is required");
     }
     Account account = shortService.addAccount(new Account(accountId, shortService.generateUnique(8)));
-    return ok(new AccountView(account).render());
+    if (account == null){
+      return status(CONFLICT,new AccountView(account).render());
+    }
+    return created(new AccountView(account).render());
   }
 
   @With(AuthAction.class)
@@ -73,7 +76,7 @@ public class Application extends Controller {
     rule = shortService.addRule(rule);
     String absoluteShortUrl = routes.Application.goRedirect(rule.getShortUrl()).absoluteURL(request());
 
-    return ok(new RegisterView(absoluteShortUrl).render());
+    return created(new RegisterView(absoluteShortUrl).render());
   }
 
 

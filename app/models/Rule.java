@@ -1,5 +1,7 @@
 package models;
 
+import play.Logger;
+
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -52,6 +54,7 @@ public class Rule {
   }
 
   public long incrementCount() {
+//    Logger.debug(String.format("LongUrl: %s, ShortUrl: %s, Count: %d", getLongUrl(), getShortUrl(),getCount()));
     return count.incrementAndGet();
   }
 
