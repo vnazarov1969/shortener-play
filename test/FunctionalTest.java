@@ -1,5 +1,4 @@
 import com.fasterxml.jackson.databind.JsonNode;
-import controllers.Application;
 import org.junit.Test;
 import play.libs.Json;
 import play.mvc.Http.RequestBuilder;

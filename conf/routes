@@ -6,11 +6,11 @@ GET     /                           controllers.Assets.at(path="/public", file="
 
 GET     /help                       controllers.Assets.at(path="/public", file="readme.html")
 
-POST    /account                    controllers.Application.account()
+POST    /account                    controllers.RegistrationController.account()
 
-POST    /register                   controllers.Application.register()
+POST    /register                   controllers.RegistrationController.register()
 
-GET     /statistic/:accountId				controllers.Application.statistic(accountId)
+GET     /statistic/:accountId				controllers.StatisticController.statistic(accountId)
 
-GET			/:shortUrl									controllers.Application.goRedirect(shortUrl)
+GET			/:shortUrl									controllers.RedirectController.goRedirect(shortUrl)
 

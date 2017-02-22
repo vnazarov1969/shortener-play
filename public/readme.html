@@ -5,7 +5,7 @@
     <title># Shortener-Play - example of typical REST service</title>
 </head>
 <body>
-
+<div style="padding: 4%">
     <h1>Shortener-Play - example of typical REST service </h1>
     <p>Shortener-Play implements usual functionality which make possible use short url instead of long ones.</p>
 
@@ -23,7 +23,16 @@
     </ul>
     </p>
     <h2>How to run</h2>
-<p>Project has prepared zip file to run standalone service easy, you need only download file, unzip and run script</p>
+    <p>Project has prepared as zip file to run standalone service easy.</p>
+    <p>You need only:</p>
+    <ol>
+    <li>download and unzip file: [shortener-play25-1.0-SNAPSHOT.zip](https://github.com/vnazarov1969/shortener-play/raw/master/dist/shortener-play25-1.0-SNAPSHOT.zip)
+    </li>
+    <li>run script</li>
+
+    <pre>$sh bin/shortener-play25</pre>
+    </ol>
+    <p>Project has prepared zip file to run standalone service easy, you need only download file, unzip and run script</p>
 
     <h2>How to build</h2>
 <p>
@@ -53,24 +62,108 @@ So, to build project you need:
     </ol>
 </p>
 
-<p>    Now you can browse this page: http://localhost:9000/help, configure service by curl</p>
+<p>    Now you can browse this page: <a href="http://localhost:9000/help">http://localhost:9000/help</a>, configure service by curl</p>
     <pre>
     curl -H "Content-Type: application/json" -POST localhost:9000/account -d'{"AccountId": "test"}'
     curl -u test:test -H "Content-Type: application/json" -POST localhost:9000/register -d'{"url": "https://www.google.ru", "redirectType": "301"}'
     curl -H "Content-Type: application/json" -GET 'localhost:9000/statistic/local'?pretty
     </pre>
 
-<p>or using redirect service http://localhost:9000/"shortUrl"</p>
+<p> or using redirect service
+    <pre> "http://localhost:9000/"shortUrl"</pre>
 
 <h2>API</h2>
 
+    <h3>Open account</h3>
+<pre>
+    Uri : /account
+    HTTP Method: POST
+    Request Type: {application/json}\
+    Request Body: AccountId: String. Mandatory
+                  Example: {AccountId:"test"}
+    Response Type: {application/json}
+    Response Status:
+        CREATED(201): Success
+        CONFLICT(409): Account with same ID exists
+        BAD_REQUEST(400): Wrong request
+    Response Body:
+              success: true or false
+              description: account is opened | account with that ID already exists
+              password: Automatically generated password 8 symbols, returns if account was created
+              Example {success: 'true', description: 'Your account is opened', password: 'xC345Fc0'}
+</pre>
+
+    <h3>Register Url</h3>
+
+
+<pre>
+    Uri : /register
+    HTTP Method: POST
+    Request Type: {application/json}
+    Request Body:
+         url: String. mandatory
+         redirectType: 301|302, not mandatory, default 302
+                  Example: {"url":"http://google.com", "redirectType":301}
+    Request Header: Basic Authentication - "(user:password)" is base 64 encoded
+    Response Type: {application/json}
+    Response Status:
+        CREATED(201): Success
+        BAD_REQUEST(400): Wrong request
+        UNAUTHORIZED(401): Unauthorized
+    Response Body:
+              shortUrl (shortened URL)
+              Example: { shortUrl: 'http://short.com/xYswlE'}
+</pre>
+
+<h3>Get Statistic</h3>
+<pre>
+    Uri : /statistic/"accountId"
+    HTTP Method: GET
+    Request Header: Basic Authentication - "(user:password)" is base 64 encoded
+    Response Type: {application/json}
+    Response Status:
+        OK(200): Success
+    Response Body:
+        The server responds with a JSON object, key:value map, where the key is the registered URL,
+        and the value is the number of this URL redirects..
+        Example:
+        {
+         'http://myweb.com/someverylongurl/thensomedirectory/: 10,
+         'http://myweb.com/someverylongurl2/thensomedirectory2/: 4,
+         'http://myweb.com/someverylongurl3/thensomedirectory3/: 91,
+         }
+</pre>
+
+    <h3>Redirect</h3>
+
+<pre>
+    Uri : /"shortUrl"
+    HTTP Method: GET
+    Response Status:
+        MOVED_PERMANENTLY(301): Success
+        FOUND(302):Success
+        BAD_REQUEST(400): Wrong short Url
+    Response Body:
+        Redirect on stored site
+</pre>
+
+    <h3>Help</h3>
+
+<pre>
+    Uri : /help
+    HTTP Method: GET
+    Response Status:
+        OK(200): Success
+    Response Body:
+        This info
+</pre>
 
 
 
-<h2>License</h2>
+<h3>License</h3>
 
-<p>Shortener-Play is under MIT license. See [LICENSE](https://github.com/vnazarov1969/shortener-play/blob/master/LICENSE)</p>
-
+<p>Shortener-Play is under MIT license. See <a href="https://github.com/vnazarov1969/shortener-play/blob/master/LICENSE">License</a>)</p>
+</div>
 </body>
 </html>
 

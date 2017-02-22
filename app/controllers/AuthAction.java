@@ -1,9 +1,10 @@
-package services;
+package controllers;
 
 import play.mvc.Action;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.Logger;
+import services.ShortService;
 
 import javax.inject.Inject;
 import java.util.concurrent.CompletableFuture;
