@@ -51,6 +51,83 @@ Now you can browse this page: http://localhost:9000/help, configure service by c
 
 ## API
 
+### Configuration
+
+#### Openning Account
+
+     Uri : /account
+     HTTP Method: POST
+     Request Type: {application/json}\
+     Request Body: AccountId: String. Mandatory
+                   Example: {AccountId:"test"}
+     Response Type: {application/json}
+     Response Status: 
+         CREATED(201): Success 
+         CONFLICT(409): Account with same ID exists
+         BAD_REQUEST(400): Wrong request
+     Response Body: 
+               success: true or false
+               description: account is opened | account with that ID already exists
+               password: Automatically generated password 8 symbols, returns if account was created
+               Example {success: 'true', description: 'Your account is opened', password: 'xC345Fc0'} 
+
+
+#### Register Url
+
+     Uri : /register
+     HTTP Method: POST
+     Request Type: {application/json}
+     Request Body: 
+          url: String. mandatory
+          redirectType: 301|302, not mandatory, default 302
+                   Example: {"url":"http://google.com", "redirectType":301}
+     Request Header: Basic Authentication - "(user:password)" is base 64 encoded
+     Response Type: {application/json}
+     Response Status: 
+         CREATED(201): Success 
+         BAD_REQUEST(400): Wrong request
+         UNAUTHORIZED(401): Unauthorized
+     Response Body: 
+               shortUrl (shortened URL)
+               Example: { shortUrl: 'http://short.com/xYswlE'}
+
+### Statistic
+
+     Uri : /statistic/"accountId"
+     HTTP Method: GET
+     Request Header: Basic Authentication - "(user:password)" is base 64 encoded
+     Response Type: {application/json}
+     Response Status: 
+         OK(200): Success 
+     Response Body: 
+         The server responds with a JSON object, key:value map, where the key is the registered URL, 
+         and the value is the number of this URL redirects.. 
+         Example:
+         {
+          'http://myweb.com/someverylongurl/thensomedirectory/: 10,
+          'http://myweb.com/someverylongurl2/thensomedirectory2/: 4,
+          'http://myweb.com/someverylongurl3/thensomedirectory3/: 91,
+          }
+
+### Redirect
+
+    Uri : /"shortUrl"
+    HTTP Method: GET
+    Response Status: 
+        MOVED_PERMANENTLY(301): Success
+        FOUND(302):Success
+        BAD_REQUEST(400): Wrong short Url
+    Response Body: 
+        Redirect on stored site
+
+### Help
+
+    Uri : /help
+    HTTP Method: GET
+    Response Status: 
+        OK(200)
+    Response Body: 
+        This info
 
 
 
