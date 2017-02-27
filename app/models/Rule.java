@@ -2,12 +2,13 @@ package models;
 
 import play.Logger;
 
+import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Created by vnazarov on 20/02/17.
  */
-public class Rule {
+public class Rule implements Serializable {
   private String accountId;
   private String shortUrl;
   private String longUrl;

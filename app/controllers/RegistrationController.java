@@ -56,7 +56,7 @@ public class RegistrationController extends Controller {
             jsn.findPath("url").asText(),
             jsn.findPath("redirectType").asInt(302));
 
-    rule = shortService.addRule(rule);
+    rule = shortService.addRule(rule,currentAccount());
     String absoluteShortUrl = routes.RedirectController.goRedirect(rule.getShortUrl()).absoluteURL(request());
 
     return created(new RegisterView(absoluteShortUrl).render());

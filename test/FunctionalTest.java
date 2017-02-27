@@ -1,11 +1,17 @@
 import com.fasterxml.jackson.databind.JsonNode;
-import org.junit.Test;
+import org.junit.*;
+import play.Application;
+import play.Environment;
 import play.libs.Json;
 import play.mvc.Http.RequestBuilder;
 import play.mvc.Result;
+import play.test.Helpers;
 import play.test.WithApplication;
 
+import java.io.File;
 import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 import static play.test.Helpers.*;
@@ -13,7 +19,10 @@ import static play.test.Helpers.*;
 public class FunctionalTest extends WithApplication {
     @Override
     protected play.Application provideApplication() {
-      return fakeApplication(inMemoryDatabase("test"));
+      Environment environment = play.Environment.simple();
+      environment.getFile("./data.txt").delete();
+      Application app = fakeApplication();
+      return app;
     }
 
   @Test

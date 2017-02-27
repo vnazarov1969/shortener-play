@@ -1,13 +1,13 @@
 package models;
 
-
+import java.io.Serializable;
 import java.util.Base64;
 
 /**
  * Created by vnazarov on 20/02/17.
  */
 
-public class Account  {
+public class Account implements Serializable {
   private String accountId;
   private String password;
 
