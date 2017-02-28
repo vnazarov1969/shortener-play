@@ -9,9 +9,9 @@ Service gives possibility to:
 
 Shortener-Play was implemented in the MVC pattern by Java PlayFramework 2.5:
   * Service does not have persistence storage, 
-  * Temporary storage bases on java.collections, we do not use DataBase to demonstrate capabilities of collections
-  * Views do not use standard PlayFramework2.5 template manager to make project easier  
-
+  * Temporary storage uses inmemory Database H2 by JDBC driver
+  * Service supports altenative way for storing data by java.collections, you need configure DI before.
+   
 ## How to run
   Project has prepared as zip file to run standalone service easy.
   You need only:
@@ -48,7 +48,10 @@ Now you can browse this page: http://localhost:9000/help, configure service by c
      
 or using redirect service http://localhost:9000/"shortUrl"
   
-    Notes: service has embedded account:{"AccountID": "local", "password": "test"} 
+    Notes: service returns password "test" for "AccountID": "local".
+    
+    Notes 2: to switch mode to Java Collection, comment line in application.conf:
+    #play.modules.enabled += "ModuleJDBC"
   
 
 ## API
