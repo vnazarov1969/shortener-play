@@ -46,7 +46,9 @@ Now you can browse this page: http://localhost:9000/help, configure service by c
     curl -u test:test -H "Content-Type: application/json" -POST localhost:9000/register -d'{"url": "https://www.google.ru", "redirectType": "301"}' 
     curl -H "Content-Type: application/json" -GET 'localhost:9000/statistic/local'?pretty 
      
-  or using redirect service http://localhost:9000/"shortUrl"
+or using redirect service http://localhost:9000/"shortUrl"
+  
+    Notes: service has embedded account:{"AccountID": "local", "password": "test"} 
   
 
 ## API
