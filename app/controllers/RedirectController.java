@@ -4,7 +4,7 @@ import models.Rule;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
-import services.ShortService;
+import services.IShortService;
 
 import javax.inject.Inject;
 import java.util.Collections;
@@ -13,9 +13,9 @@ import java.util.Collections;
  * Created by vnazarov on 22/02/17.
  */
 public class RedirectController extends Controller {
-  protected ShortService shortService;
+  protected IShortService shortService;
   @Inject
-  public RedirectController(ShortService service){
+  public RedirectController(IShortService service){
     shortService = service;
   }
 
@@ -24,7 +24,7 @@ public class RedirectController extends Controller {
     if (rule == null){
       return notFound();
     }
-    rule.incrementCount();
+    shortService.incrementRedirectCount(shortUrl);
     return new Result(rule.getRedirectType(), Collections.singletonMap("Location", rule.getLongUrl()));
   }
 

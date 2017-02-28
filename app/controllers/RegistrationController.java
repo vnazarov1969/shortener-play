@@ -6,7 +6,8 @@ import models.Rule;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.With;
-import services.ShortService;
+import services.Helper;
+import services.IShortService;
 import views.AccountView;
 import views.RegisterView;
 
@@ -14,9 +15,9 @@ import javax.inject.Inject;
 
 public class RegistrationController extends Controller {
 
-  protected ShortService shortService;
+  protected IShortService shortService;
   @Inject
-  public RegistrationController(ShortService service){
+  public RegistrationController(IShortService service){
     shortService = service;
   }
 
@@ -33,7 +34,9 @@ public class RegistrationController extends Controller {
     if (accountId.length() < 1) {
       return badRequest("Invalid Json Format, 'AccointId' is required");
     }
-    Account account = shortService.addAccount(new Account(accountId, shortService.generateUnique(8)));
+    String password = (accountId.equalsIgnoreCase("local"))?"test":Helper.generateUniqueString(8);
+
+    Account account = shortService.addAccount(new Account(accountId, password ));
     if (account == null){
       return status(CONFLICT,new AccountView(account).render());
     }
@@ -61,8 +64,5 @@ public class RegistrationController extends Controller {
 
     return created(new RegisterView(absoluteShortUrl).render());
   }
-
-
-
 
 }

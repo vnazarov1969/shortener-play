@@ -4,6 +4,7 @@ import play.mvc.Action;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.Logger;
+import services.IShortService;
 import services.ShortService;
 
 import javax.inject.Inject;
@@ -14,10 +15,10 @@ import java.util.concurrent.CompletionStage;
  * Created by vnazarov on 20/02/17.
  */
 public class AuthAction extends Action.Simple {
-  private ShortService service;
+  private IShortService service;
   private static final String AUTHORIZATION = "authorization";
   @Inject
-  public AuthAction(ShortService service){
+  public AuthAction(IShortService service){
     this.service = service;
   }
   @Override

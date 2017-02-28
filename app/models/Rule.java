@@ -22,6 +22,15 @@ public class Rule implements Serializable {
     this.count = new AtomicLong(0);
   }
 
+  public Rule(String shortUrl, String accountId, String longUrl, Integer redirectType, Long count ){
+    this.accountId = accountId;
+    this.longUrl = longUrl;
+    this.redirectType = redirectType;
+    this.count = new AtomicLong(count);
+    this.shortUrl = shortUrl;
+  }
+
+
   public String getShortUrl() {
     return shortUrl;
   }

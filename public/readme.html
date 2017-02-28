@@ -18,8 +18,8 @@
     <p>Shortener-Play was implemented in the MVC pattern by Java PlayFramework 2.5:</p>
     <ul>
         <li>Service does not have persistence storage</li>
-        <li>Temporary storage bases on java.collections, we do not use DataBase to demonstrate capabilities of collections</li>
-        <li>Views do not use standard PlayFramework2.5 template manager to make project easier</li>
+        <li>Temporary storage uses inmemory Database H2 by JDBC driver</li>
+        <li> Service supports altenative way for storing data by java.collections, you need configure DI before.</li>
     </ul>
     </p>
     <h2>How to run</h2>

@@ -3,7 +3,7 @@ package controllers;
 import models.Rule;
 import play.mvc.Controller;
 import play.mvc.Result;
-import services.ShortService;
+import services.IShortService;
 import views.StatisticView;
 
 import javax.inject.Inject;
@@ -16,9 +16,9 @@ import java.util.Map;
  * Created by vnazarov on 22/02/17.
  */
 public class StatisticController extends Controller {
-  protected ShortService shortService;
+  protected IShortService shortService;
   @Inject
-  public StatisticController(ShortService service){
+  public StatisticController(IShortService service){
     shortService = service;
   }
 

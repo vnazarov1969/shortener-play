@@ -2,6 +2,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.*;
 import play.Application;
 import play.Environment;
+import play.api.db.Database;
+import play.api.db.evolutions.Evolution;
+import play.db.evolutions.Evolutions;
 import play.libs.Json;
 import play.mvc.Http.RequestBuilder;
 import play.mvc.Result;
@@ -19,11 +22,18 @@ import static play.test.Helpers.*;
 public class FunctionalTest extends WithApplication {
     @Override
     protected play.Application provideApplication() {
-      Environment environment = play.Environment.simple();
-      environment.getFile("./data.txt").delete();
-      Application app = fakeApplication();
-      return app;
+      return  fakeApplication(inMemoryDatabase("default"));
     }
+
+  @Before
+  public void addLocalAccount(){
+    RequestBuilder request = new RequestBuilder()
+            .method(POST)
+            .uri("/account")
+            .bodyJson(Json.parse("{\"AccountId\":\"local\"}"));
+    Result result = route(request);
+    assertEquals(CREATED, result.status());
+  }
 
   @Test
   public void help() {

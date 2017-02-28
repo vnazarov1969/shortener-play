@@ -1,5 +1,6 @@
 package services;
 
+import com.google.inject.ImplementedBy;
 import models.Account;
 import models.Rule;
 import play.Configuration;
@@ -20,11 +21,10 @@ import java.util.stream.Collectors;
  * Created by vnazarov on 20/02/17.
  */
 @Singleton
-public class ShortService {
+public class ShortService implements IShortService{
 
   Configuration configuration;
   Environment environment;
-  ApplicationLifecycle lifecycle;
 
   private Map<String, Account> accounts;
   private Map<String, Rule> rules;
@@ -40,7 +40,6 @@ public class ShortService {
   ){
     this.configuration = configuration;
     this.environment = environment;
-    this.lifecycle = lifecycle;
 
     lifecycle.addStopHook(() -> {
       StoreData();
@@ -52,7 +51,7 @@ public class ShortService {
     tokens = new ConcurrentHashMap<>();
     rulesByAccount = new ConcurrentHashMap<>();
     LoadData();
-    Init();
+//    Init();
   }
   //add account for test reason by curl
   protected void Init(){
@@ -92,9 +91,9 @@ public class ShortService {
   }
 
   public Rule addRule(Rule rule, Account account){
-    rule.setShortUrl(generateUnique(8));
+    rule.setShortUrl(Helper.generateUniqueString(8));
     while (rules.putIfAbsent(rule.getShortUrl(), rule )!=null){
-      rule.setShortUrl(generateUnique(8));
+      rule.setShortUrl(Helper.generateUniqueString(8));
     }
     addRuleToAccount(rule);
     return rule;
@@ -108,14 +107,10 @@ public class ShortService {
   private void StoreData() {
     String dbpath = configuration.getString("DBPATH");
     if (dbpath == null){
-      Logger.info("Data File not found, Application didn't save data");
+      Logger.info("Data File not configured, Application didn't save data");
       return;
     }
     File file = environment.getFile(dbpath);
-    if (file == null){
-      Logger.info("Data File {} not found, Application didn't save data",dbpath);
-      return;
-    }
 
     OutputStream os = null;
     try {
@@ -133,7 +128,7 @@ public class ShortService {
   private void LoadData(){
     String dbpath = configuration.getString("DBPATH");
     if (dbpath == null){
-      Logger.info("Data File not found, Application starts with empty configuration");
+      Logger.info("Data File not configured, Application starts with empty configuration");
       return;
     }
     File file = environment.getFile(dbpath);
@@ -151,7 +146,10 @@ public class ShortService {
       rules = (ConcurrentHashMap<String,Rule>)s.readObject();
       s.close();
     }
-    catch (Exception e){
+    catch (ClassNotFoundException e){
+      Logger.error(e.getMessage());
+    }
+    catch (IOException e){
       Logger.error(e.getMessage());
     }
     ReCalculateReferences();
@@ -162,16 +160,9 @@ public class ShortService {
     rules.values().forEach(r -> addRuleToAccount(r));
   }
 
-
-  public static String generateUnique(int size){
-    final String alphabet ="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-    int n = alphabet.length();
-    StringBuilder sb = new StringBuilder(size);
-    Random r = new Random();
-    for (int i=0; i<size; i++) {
-      sb.append(alphabet.charAt(r.nextInt(n)));
-    }
-    return sb.toString();
+  public Long incrementRedirectCount(String shortUrl){
+    return rules.get(shortUrl).incrementCount();
   }
+
 
 }
