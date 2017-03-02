@@ -11,6 +11,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 
 /**
  * Created by vnazarov on 22/02/17.
@@ -23,22 +25,23 @@ public class StatisticController extends Controller {
   }
 
 
-  public Result statistic(String accountId) {
+  public CompletionStage<Result> statistic(String accountId) {
 
     if (shortService.accountById(accountId)==null){
-      return badRequest("Invalid account Id");
+      return CompletableFuture.completedFuture(badRequest("Invalid account Id"));
     }
-
-    List<Rule> list = shortService.rulesByAccountId(accountId);
-
-    // Aggregate by LongUrl
-    Map<String,Long> map = new HashMap<>();
-    for(Rule rule:list){
-      Long val = map.get(rule.getLongUrl());
-      map.put(rule.getLongUrl(), rule.getCount() + ((val == null)? 0 : val));
-    }
-
-    return ok(new StatisticView(map).render());
+    // Use Async call for aggregating, to use not-bloking in main request rendering
+    CompletionStage<Map<String,Long>> stageMap = CompletableFuture.supplyAsync(() -> {
+      List<Rule> list = shortService.rulesByAccountId(accountId);
+      // Aggregate by LongUrl
+      Map<String,Long> map = new HashMap<>();
+      for(Rule rule:list){
+        Long val = map.get(rule.getLongUrl());
+        map.put(rule.getLongUrl(), rule.getCount() + ((val == null)? 0 : val));
+      }
+      return map;
+    });
+    return stageMap.thenApply(map -> ok(new StatisticView(map).render()));
   }
 
 }

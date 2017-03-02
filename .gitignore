@@ -6,5 +6,6 @@ target
 /.project
 /.settings
 /RUNNING_PID
-
-conf/db.conf
+/.sbtserver
+project/.sbtserver
+project/.sbtserver.lock

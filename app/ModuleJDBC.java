@@ -1,6 +1,6 @@
 import com.google.inject.AbstractModule;
 import services.IShortService;
-import services.ShortService;
+import services.ShortServiceCached;
 import services.ShortServiceJDBC;
 
 /**
@@ -10,7 +10,7 @@ public class ModuleJDBC extends AbstractModule{
     @Override
     protected void configure() {
         bind(IShortService.class)
-                .to(ShortServiceJDBC.class)
+                .to(ShortServiceCached.class)
                 .asEagerSingleton();
     }
 }

@@ -12,12 +12,14 @@ import play.test.Helpers;
 import play.test.WithApplication;
 
 import java.io.File;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static org.junit.Assert.*;
 import static play.test.Helpers.*;
+import static services.Helper.generateUniqueString;
 
 public class FunctionalTest extends WithApplication {
     @Override
@@ -200,6 +202,7 @@ public class FunctionalTest extends WithApplication {
   public void statistic() {
     doRedirect("http://yandex.ru",301,10);
     doRedirect("http://google.ru",302,20);
+    doRedirect("http://google.ru",301,20);
     RequestBuilder request = new RequestBuilder()
             .method(GET)
             .uri("/statistic/local");
@@ -208,7 +211,7 @@ public class FunctionalTest extends WithApplication {
     assertEquals("application/json", result.contentType().get());
     JsonNode jsn = Json.parse(contentAsString(result));
     assertEquals(jsn.findPath("http://yandex.ru").asInt(),10);
-    assertEquals(jsn.findPath("http://google.ru").asInt(), 20);
+    assertEquals(jsn.findPath("http://google.ru").asInt(), 40);
   }
 
   static void doRedirect(String url, Integer requestType, Integer count  ){
@@ -243,5 +246,47 @@ public class FunctionalTest extends WithApplication {
     assertEquals(301, result.status());
     assertTrue(result.header("Location").orElse("").contains("yandex"));
   }
+
+
+  @Test
+  public void multiThreaded() {
+
+    for(int i = 0; i < 10000; i++ ) {
+      doRedirect("http://yandex.ru" + "/" +  generateUniqueString(20), 301, 1);
+    }
+
+    Executor executor = Executors.newFixedThreadPool(10);
+    long start = System.nanoTime();
+
+    List<CompletableFuture<Void>> futures = IntStream.range(0,10).mapToObj(index ->
+            new CompletableFuture<Void>().runAsync(() -> {
+              doRedirect("http://yandex.ru",301,10);
+              doRedirect("http://yandex.ru",301,10);
+              doRedirect("http://yandex.ru",301,10);
+              doRedirect("http://yandex.ru",301,10);
+              doRedirect("http://google.ru",302,20);
+              doRedirect("http://google.ru",301,20);
+              doRedirect("http://google.ru",302,20);
+            }, executor)).
+            collect(Collectors.toList());
+
+    List<Void> list = futures.stream().map(CompletableFuture<Void>::join).collect(Collectors.toList());
+
+    long duration = (System.nanoTime() - start) / 1_000_000;
+    System.out.printf("Processed %d tasks in %d millis\n", futures.size(), duration);
+
+    RequestBuilder request = new RequestBuilder()
+            .method(GET)
+            .uri("/statistic/local");
+    Result result = route(request);
+    assertEquals(OK, result.status());
+    assertEquals("application/json", result.contentType().get());
+    JsonNode jsn = Json.parse(contentAsString(result));
+    assertEquals(400, jsn.findPath("http://yandex.ru").asInt());
+    assertEquals(600, jsn.findPath("http://google.ru").asInt());
+  }
+
+
+
 
 }

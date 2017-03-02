@@ -25,7 +25,6 @@ public class ShortServiceJDBC implements IShortService  {
     private Database db;
 
     @Inject
-
     public void ShortServiceJDBC(Database db){
         this.db = db;
  //       Init();
