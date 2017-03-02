@@ -8,8 +8,8 @@ Service gives possibility to:
   * Usage Statistics (API)  
 
 Shortener-Play was implemented in the MVC pattern by Java PlayFramework 2.5:
-  * Service does not have persistence storage, 
-  * Temporary storage uses inmemory Database H2 by JDBC driver
+  * Service uses temporary storage is implemented by inmemory Database H2 over JDBC 
+  * Service caches database operations and use async approach to critical calls
   * Service supports altenative way for storing data by java.collections, you need configure DI before.
    
 ## How to run
